@@ -1,5 +1,7 @@
 # clerk
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/josephhaaga/clerk/main.svg)](https://results.pre-commit.ci/latest/github/josephhaaga/clerk/main)
+
 Simple CLI to create new Markdown journal entry files.
 
 ## Usage
