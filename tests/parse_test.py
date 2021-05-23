@@ -17,6 +17,7 @@ LAST_WEDNESDAY = None
 @pytest.mark.parametrize(
     "english, expected",
     [
+        ("today", TODAY),
         ("yesterday", YESTERDAY),
         ("2 days ago", TWO_DAYS_AGO),
         ("four days ago", FOUR_DAYS_AGO),
