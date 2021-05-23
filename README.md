@@ -1,4 +1,4 @@
-# my-journal
+# clerk
 
 Simple CLI to create new Markdown journal entry files.
 

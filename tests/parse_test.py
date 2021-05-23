@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from my_journal.app import parse_english_to_date
+from clerk.parse import parse_english_to_date
 
 
 TODAY = datetime.datetime.now()
