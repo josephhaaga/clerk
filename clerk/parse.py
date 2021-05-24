@@ -28,6 +28,8 @@ def parse_number(number: Union[str, int]) -> int:
 def parse_english_to_date(english: str) -> datetime.datetime:
     query = english.strip().lower()
     today = datetime.datetime.now()
+    if query == "today":
+        return today
     if query == "yesterday":
         operation = operator.sub
         days = 1
@@ -53,6 +55,7 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         number = parse_number(quantity)
         days_in_unit = scales[unit]
         days = number * days_in_unit
+    # TODO else: raise Exception
     return operation(today, datetime.timedelta(days=days))
 
 
