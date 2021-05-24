@@ -1,4 +1,4 @@
-## Move journal.sh logic into here
+# Move journal.sh logic into here
 import datetime
 import os
 import pathlib
