@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from clerk.parse import parse_english_to_date
+from src.parse import parse_english_to_date
 
 
 TODAY = datetime.datetime.now()
