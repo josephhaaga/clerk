@@ -5,7 +5,7 @@ import pathlib
 import subprocess
 import sys
 
-from clerk.parse import parse_english_to_date
+from src.parse import parse_english_to_date
 
 
 # these should come from a config file!
@@ -18,7 +18,6 @@ FILE_EXTENSION = "md"
 
 def main() -> int:
     print(sys.argv)
-
     # default to today's journal
     day = "today"
     if len(sys.argv) > 1:
