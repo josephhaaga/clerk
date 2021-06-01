@@ -1,3 +1,4 @@
+import pytest
 from typing import Mapping
 
 from src.config import dirs
@@ -17,4 +18,13 @@ def test_config_file_path_contains_clerk_dot_conf():
 
 def test_get_config_returns_mapping():
     got = get_config()
+    breakpoint()
     assert isinstance(got, Mapping)
+
+
+@pytest.mark.parametrize(
+    "field", ["journal_directory", "editor", "date_format", "file_extension"]
+)
+def test_config_contains_necessary_fields(field):
+    config = get_config()
+    assert field in config
