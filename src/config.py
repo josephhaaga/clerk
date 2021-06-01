@@ -23,3 +23,10 @@ def get_config() -> Mapping:
     conf = ConfigParser()
     conf.read(config_file)
     return conf
+
+
+def write_config(conf_map: Mapping) -> None:
+    conf_file_path = config_file_path()
+    print(f"Writing to config: {conf_file_path}")
+    with open(conf_file_path, "w") as configfile:
+        conf_map.write(configfile)

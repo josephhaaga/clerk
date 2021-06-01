@@ -1,9 +1,15 @@
+from configparser import ConfigParser
+from pathlib import Path
 import pytest
+from tempfile import NamedTemporaryFile
 from typing import Mapping
+from unittest.mock import MagicMock
+from unittest.mock import patch
 
 from src.config import dirs
 from src.config import config_file_path
 from src.config import get_config
+from src.config import write_config
 
 
 def test_dirs_contains_user_config_dir():
@@ -18,10 +24,21 @@ def test_config_file_path_contains_clerk_dot_conf():
 
 def test_get_config_returns_mapping():
     got = get_config()
-    breakpoint()
     assert isinstance(got, Mapping)
 
 
+@patch("src.config.config_file_path")
+def test_write_config_writes_successfully(patched_config_file_path):
+    conf = ConfigParser()
+    conf["DEFAULT"]["hello"] = "hi there"
+    with NamedTemporaryFile() as f:
+        patched_config_file_path.return_value = Path(f.name)
+        write_config(conf)
+        file_contents = open(f.name, "r").readlines()
+        assert file_contents == ["[DEFAULT]\n", "hello = hi there\n", "\n"]
+
+
+@pytest.mark.skip
 @pytest.mark.parametrize(
     "field", ["journal_directory", "editor", "date_format", "file_extension"]
 )
