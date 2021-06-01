@@ -9,3 +9,4 @@
     - a config option to update Google Tasks whenever I save my journal
         - maybe config file hooks for `on_create`, `on_open`, `on_save` and `on_discard`?
 - [ ] add "create new journal" functionality with a sensible templating solution
+- [ ] add an error log in the appdir

@@ -17,12 +17,12 @@ FILE_EXTENSION = "md"
 
 
 def main() -> int:
-    print(sys.argv)
-    # default to today's journal
-    day = "today"
+    # app configuration
+
+    # main loop
+    day = "today"  # default to today's journal
     if len(sys.argv) > 1:
-        # parse date and open that journal
-        day = " ".join(sys.argv[1:])
+        day = " ".join(sys.argv[1:])  # parse date and open that journal
     target_date = parse_english_to_date(day)
     date_as_filename = convert_to_filename(target_date)
     open_file(date_as_filename)
