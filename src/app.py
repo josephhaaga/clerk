@@ -6,16 +6,9 @@ import subprocess
 import sys
 from typing import Mapping
 
+from src.config import config_file_path
 from src.config import get_config
 from src.parse import parse_english_to_date
-
-
-# these should come from a config file!
-HOME = os.getenv("HOME")
-JOURNAL_DIRECTORY = os.getenv("PATH_TO_JOURNALS", f"{HOME}/Documents/Journal/journals")
-PREFERRED_EDITOR = os.getenv("EDITOR", "vi")
-DATE_FORMAT = "%Y-%m-%d"
-FILE_EXTENSION = "md"
 
 
 def main() -> int:
@@ -37,10 +30,16 @@ class Application:
     def __init__(self, config: Mapping):
         # try to read config, and ensure required values are present
         # TODO: otherwise, instruct user to setup their config file (`clerk configure`)
-        self.journal_directory = config["DEFAULT"]["journal_directory"]
-        self.preferred_editor = config["DEFAULT"]["preferred_editor"]
-        self.date_format = config["DEFAULT"]["date_format"]
-        self.file_extension = config["DEFAULT"]["file_extension"]
+        try:
+            self.journal_directory = config["DEFAULT"]["journal_directory"]
+            self.preferred_editor = config["DEFAULT"]["preferred_editor"]
+            self.date_format = config["DEFAULT"]["date_format"]
+            self.file_extension = config["DEFAULT"]["file_extension"]
+        except KeyError as e:
+            print(
+                f"Your configuration at {config_file_path()} is missing a key '{e.args[0]}'"
+            )
+            exit(1)
 
     def open_file(self, filename: str):
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
