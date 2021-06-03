@@ -15,3 +15,15 @@ $ journal tomorrow
 $ journal last friday
 # Creates or re-opens last friday's journal
 ```
+
+## Setup
+
+You'll need a config like the following
+
+```
+[DEFAULT]
+journal_directory=/Users/josephhaaga/journals  # absolute path
+preferred_editor=vi  # or code, nano, emacs, babi
+date_format=%%Y-%%m-%%d  # double % required - used in datetime's strftime()
+file_extension=md  # or rst, txt
+```
