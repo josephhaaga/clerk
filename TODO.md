@@ -4,6 +4,10 @@
 - [X] test the main application loop (`app.main()`)
 - [X] add basic config file handling
 - [ ] publish package
+    - create a `console_scripts` "alias" for `journal`
+- [ ] add a `sample-config` command that prints an example config
+    - README should instruct users to `clerk sample-config > /path/to/config/file`
+    - since our config files are hidden in appdirs, maybe we should have a `generate-config` command that writes it _for_ them?
 - [ ] add Google Tasks API integration
     - add a config option/flag to seed new journals with Google Tasks
     - a config option to update Google Tasks whenever I save my journal
