@@ -65,21 +65,9 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         number = parse_number(quantity)
         days_in_unit = SCALES[unit]
         days = number * days_in_unit
-    elif "last" in query:
+    elif "last" in query or "this" in query or "next" in query:
         operation = operator.sub
-        day = query.replace("last", "").strip()
-        day_of_week = DAYS_OF_WEEK[day]
-        how_many_days_ago = (day_of_week - today.weekday()) % 7
-        days = how_many_days_ago - 1
-    elif "this" in query:
-        operation = operator.sub
-        day = query.replace("this", "").strip()
-        day_of_week = DAYS_OF_WEEK[day]
-        how_many_days_ago = (day_of_week - today.weekday()) % 7
-        days = how_many_days_ago - 1
-    elif "next" in query:
-        operation = operator.sub
-        day = query.replace("next", "").strip()
+        day = query.replace("last", "").replace("this", "").replace("next", "").strip()
         day_of_week = DAYS_OF_WEEK[day]
         how_many_days_ago = (day_of_week - today.weekday()) % 7
         days = how_many_days_ago - 1
