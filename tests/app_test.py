@@ -61,6 +61,7 @@ def test_application_creation_fails_with_missing_config_item():
         ("today", TODAY.strftime("%Y-%m-%d")),
         ("yesterday", YESTERDAY.strftime("%Y-%m-%d")),
         ("two days ago", TWO_DAYS_AGO.strftime("%Y-%m-%d")),
+        ("2 days ago", TWO_DAYS_AGO.strftime("%Y-%m-%d")),
         ("four days ago", FOUR_DAYS_AGO.strftime("%Y-%m-%d")),
         ("two days from now", TWO_DAYS_FROM_NOW.strftime("%Y-%m-%d")),
         ("three days from now", THREE_DAYS_FROM_NOW.strftime("%Y-%m-%d")),
