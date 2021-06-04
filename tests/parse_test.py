@@ -12,12 +12,6 @@ FOUR_DAYS_AGO = TODAY - datetime.timedelta(days=4)
 TWO_DAYS_FROM_NOW = TODAY + datetime.timedelta(days=2)
 THREE_DAYS_FROM_NOW = TODAY + datetime.timedelta(days=3)
 
-WEDNESDAY = 3
-_til_next_wednesday = (WEDNESDAY - TODAY.weekday()) % 7
-NEXT_WEDNESDAY = TODAY - datetime.timedelta(days=_til_next_wednesday)
-
-LAST_WEDNESDAY = None
-
 
 @pytest.mark.parametrize(
     "english, expected",
