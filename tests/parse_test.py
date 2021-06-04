@@ -55,6 +55,16 @@ def test_parse_english_to_date(english, expected):
             "last wednesday",
             datetime.datetime.fromisocalendar(2021, 1, 3),
         ),
+        (
+            datetime.datetime.fromisocalendar(2021, 2, 1),
+            "last thursday",
+            datetime.datetime.fromisocalendar(2021, 1, 4),
+        ),
+        (
+            datetime.datetime.fromisocalendar(2021, 2, 1),
+            "last friday",
+            datetime.datetime.fromisocalendar(2021, 1, 5),
+        ),
     ],
 )
 def test_parse_english_to_date_last_next_this(today, english, expected):

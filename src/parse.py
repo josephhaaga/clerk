@@ -5,7 +5,7 @@ from typing import Union
 from word2number import w2n
 
 
-scales = {
+SCALES = {
     "days": 1,
     "day": 1,
     "week": 7,
@@ -14,6 +14,16 @@ scales = {
     "months": 30,
     "year": 365,
     "years": 365,
+}
+
+DAYS_OF_WEEK = {
+    "monday": 1,
+    "tuesday": 2,
+    "wednesday": 3,
+    "thursday": 4,
+    "friday": 5,
+    "saturday": 6,
+    "sunday": 7,
 }
 
 
@@ -38,14 +48,14 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         days = 1
     elif " ago" in query:
         operation = operator.sub
-        unit, *_ = [k for k in scales.keys() if k in query]
+        unit, *_ = [k for k in SCALES.keys() if k in query]
         quantity = query.replace(" ago", "").replace(unit, "").strip()
         number = parse_number(quantity)
-        days_in_unit = scales[unit]
+        days_in_unit = SCALES[unit]
         days = number * days_in_unit
     elif " from now" in query or " from today" in query:
         operation = operator.add
-        unit, *_ = [k for k in scales.keys() if k in query]
+        unit, *_ = [k for k in SCALES.keys() if k in query]
         quantity = (
             query.replace(" from now", "")
             .replace(" from today", "")
@@ -53,8 +63,18 @@ def parse_english_to_date(english: str) -> datetime.datetime:
             .strip()
         )
         number = parse_number(quantity)
-        days_in_unit = scales[unit]
+        days_in_unit = SCALES[unit]
         days = number * days_in_unit
+    elif "last" in query:
+        operation = operator.sub
+        day = query.replace("last", "").strip()
+        day_of_week = DAYS_OF_WEEK[day]
+        how_many_days_ago = (day_of_week - today.weekday()) % 7
+        days = how_many_days_ago - 1
+    elif "this" in query:
+        pass
+    elif "next" in query:
+        pass
     # TODO else: raise Exception
     return operation(today, datetime.timedelta(days=days))
 
