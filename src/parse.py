@@ -72,9 +72,17 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         how_many_days_ago = (day_of_week - today.weekday()) % 7
         days = how_many_days_ago - 1
     elif "this" in query:
-        pass
+        operation = operator.sub
+        day = query.replace("this", "").strip()
+        day_of_week = DAYS_OF_WEEK[day]
+        how_many_days_ago = (day_of_week - today.weekday()) % 7
+        days = how_many_days_ago - 1
     elif "next" in query:
-        pass
+        operation = operator.sub
+        day = query.replace("next", "").strip()
+        day_of_week = DAYS_OF_WEEK[day]
+        how_many_days_ago = (day_of_week - today.weekday()) % 7
+        days = how_many_days_ago - 1
     # TODO else: raise Exception
     return operation(today, datetime.timedelta(days=days))
 

@@ -47,8 +47,23 @@ def test_parse_english_to_date(english, expected):
         ),
         (
             datetime.datetime.fromisocalendar(2021, 1, 1),
+            "this tuesday",
+            datetime.datetime.fromisocalendar(2021, 1, 2),
+        ),
+        (
+            datetime.datetime.fromisocalendar(2021, 1, 1),
+            "this monday",
+            datetime.datetime.fromisocalendar(2021, 1, 1),
+        ),
+        (
+            datetime.datetime.fromisocalendar(2021, 1, 1),
             "next wednesday",
             datetime.datetime.fromisocalendar(2021, 2, 3),
+        ),
+        (
+            datetime.datetime.fromisocalendar(2021, 2, 1),
+            "last monday",
+            datetime.datetime.fromisocalendar(2021, 1, 1),
         ),
         (
             datetime.datetime.fromisocalendar(2021, 2, 1),
