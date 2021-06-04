@@ -17,13 +17,13 @@ SCALES = {
 }
 
 DAYS_OF_WEEK = {
-    "monday": 1,
-    "tuesday": 2,
-    "wednesday": 3,
-    "thursday": 4,
-    "friday": 5,
-    "saturday": 6,
-    "sunday": 7,
+    "monday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
 }
 
 
@@ -65,12 +65,15 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         number = parse_number(quantity)
         days_in_unit = SCALES[unit]
         days = number * days_in_unit
-    elif "last" in query or "this" in query or "next" in query:
+    elif "last" in query:
         operation = operator.sub
-        day = query.replace("last", "").replace("this", "").replace("next", "").strip()
+        day = query.replace("last", "").strip()
         day_of_week = DAYS_OF_WEEK[day]
-        how_many_days_ago = (day_of_week - today.weekday()) % 7
-        days = how_many_days_ago - 1
+        days = 7 - (day_of_week - today.weekday())  # can be between 1-14
+    elif "this" in query:
+        pass
+    elif "next" in query:
+        pass
     # TODO else: raise Exception
     return operation(today, datetime.timedelta(days=days))
 
