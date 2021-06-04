@@ -43,7 +43,7 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         number = parse_number(quantity)
         days_in_unit = scales[unit]
         days = number * days_in_unit
-    elif " from now" or " from today" in query:
+    elif " from now" in query or " from today" in query:
         operation = operator.add
         unit, *_ = [k for k in scales.keys() if k in query]
         quantity = (
