@@ -76,12 +76,10 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         day_of_week = DAYS_OF_WEEK[day]
         days = day_of_week - today.weekday()
     elif "next" in query:
-        pass
-    # TODO else: raise Exception
+        operation = operator.add
+        day = query.replace("next", "").strip()  # tuesday
+        day_of_week = DAYS_OF_WEEK[day]  # 1
+        days = 7 + (day_of_week - today.weekday())
+    else:
+        raise ValueError(f"couldn't parse input: {english}")
     return operation(today, datetime.timedelta(days=days))
-
-
-#   else if query.startswith("last"):
-#       pass
-#   else if query.startswith("next"):
-#
