@@ -5,7 +5,7 @@ from typing import Union
 from word2number import w2n
 
 
-scales = {
+SCALES = {
     "days": 1,
     "day": 1,
     "week": 7,
@@ -14,6 +14,16 @@ scales = {
     "months": 30,
     "year": 365,
     "years": 365,
+}
+
+DAYS_OF_WEEK = {
+    "monday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
 }
 
 
@@ -38,14 +48,14 @@ def parse_english_to_date(english: str) -> datetime.datetime:
         days = 1
     elif " ago" in query:
         operation = operator.sub
-        unit, *_ = [k for k in scales.keys() if k in query]
+        unit, *_ = [k for k in SCALES.keys() if k in query]
         quantity = query.replace(" ago", "").replace(unit, "").strip()
         number = parse_number(quantity)
-        days_in_unit = scales[unit]
+        days_in_unit = SCALES[unit]
         days = number * days_in_unit
-    elif " from now" or " from today" in query:
+    elif " from now" in query or " from today" in query:
         operation = operator.add
-        unit, *_ = [k for k in scales.keys() if k in query]
+        unit, *_ = [k for k in SCALES.keys() if k in query]
         quantity = (
             query.replace(" from now", "")
             .replace(" from today", "")
@@ -53,13 +63,23 @@ def parse_english_to_date(english: str) -> datetime.datetime:
             .strip()
         )
         number = parse_number(quantity)
-        days_in_unit = scales[unit]
+        days_in_unit = SCALES[unit]
         days = number * days_in_unit
-    # TODO else: raise Exception
+    elif "last" in query:
+        operation = operator.sub
+        day = query.replace("last", "").strip()
+        day_of_week = DAYS_OF_WEEK[day]
+        days = 7 - (day_of_week - today.weekday())
+    elif "this" in query:
+        operation = operator.add
+        day = query.replace("this", "").strip()
+        day_of_week = DAYS_OF_WEEK[day]
+        days = day_of_week - today.weekday()
+    elif "next" in query:
+        operation = operator.add
+        day = query.replace("next", "").strip()  # tuesday
+        day_of_week = DAYS_OF_WEEK[day]  # 1
+        days = 7 + (day_of_week - today.weekday())
+    else:
+        raise ValueError(f"couldn't parse input: {english}")
     return operation(today, datetime.timedelta(days=days))
-
-
-#   else if query.startswith("last"):
-#       pass
-#   else if query.startswith("next"):
-#

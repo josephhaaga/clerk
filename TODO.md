@@ -3,7 +3,7 @@
 - [X] create basic workflow to open appropriate journal files
 - [X] test the main application loop (`app.main()`)
 - [X] add basic config file handling
-- [ ] add "next tuesday" and "last thursday" functionality to parse.py
+- [X] add "next tuesday" and "last thursday" functionality to parse.py
 - [ ] add a `sample-config` command that prints an example config
     - README should instruct users to `clerk sample-config > /path/to/config/file`
     - since our config files are hidden in appdirs, maybe we should have a `generate-config` command that writes it _for_ them?
