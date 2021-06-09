@@ -2,8 +2,8 @@ import datetime
 import pytest
 from unittest.mock import patch
 
-from src.clerk.parse import parse_english_to_date
-from src.clerk import parse
+from clerk.parse import parse_english_to_date
+from clerk import parse
 
 
 TODAY = datetime.datetime.now()

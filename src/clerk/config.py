@@ -4,7 +4,7 @@ from typing import Mapping
 from appdirs import AppDirs
 from configparser import ConfigParser
 
-from src.clerk import __version__
+from clerk import __version__
 
 
 def dirs() -> AppDirs:
