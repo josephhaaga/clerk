@@ -6,10 +6,10 @@ from typing import Mapping
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-from src.config import dirs
-from src.config import config_file_path
-from src.config import get_config
-from src.config import write_config
+from src.clerk.config import dirs
+from src.clerk.config import config_file_path
+from src.clerk.config import get_config
+from src.clerk.config import write_config
 
 
 def test_dirs_contains_user_config_dir():
@@ -27,7 +27,7 @@ def test_get_config_returns_mapping():
     assert isinstance(got, Mapping)
 
 
-@patch("src.config.config_file_path")
+@patch("src.clerk.config.config_file_path")
 def test_write_config_writes_successfully(patched_config_file_path):
     conf = ConfigParser()
     conf["DEFAULT"]["hello"] = "hi there"
