@@ -37,7 +37,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        python3 -m pytest --cov=src --cov-branch --junitxml=junit/test-results-${{ matrix.python-version }}.xml
+        python3 -m pytest --cov=clerk --cov-branch --junitxml=junit/test-results-${{ matrix.python-version }}.xml
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
