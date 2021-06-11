@@ -2,8 +2,8 @@ import datetime
 import pytest
 from unittest.mock import patch
 
-from src.app import main
-from src.app import Application
+from clerk.app import main
+from clerk.app import Application
 
 
 TODAY = datetime.datetime.now()
@@ -67,11 +67,11 @@ def test_application_creation_fails_with_missing_config_item():
         ("three days from now", THREE_DAYS_FROM_NOW.strftime("%Y-%m-%d")),
     ],
 )
-@patch("src.app.Application.open_file")
+@patch("clerk.app.Application.open_file")
 def test_main_loop(patched_open_file, phrase, date):
     # mock the `get_config` with a basic config
     # patch `Application.open_file` and assert it's called as expected
-    with patch("src.app.get_config", lambda: EXAMPLE_CONFIG):
+    with patch("clerk.app.get_config", lambda: EXAMPLE_CONFIG):
         with patch("sys.argv", [" "] + phrase.split(" ")):
             main()
     patched_open_file.assert_called_once_with(f"{date}.md")

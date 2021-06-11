@@ -6,9 +6,9 @@ import subprocess
 import sys
 from typing import Mapping
 
-from src.config import config_file_path
-from src.config import get_config
-from src.parse import parse_english_to_date
+from clerk.config import config_file_path
+from clerk.config import get_config
+from clerk.parse import parse_english_to_date
 
 
 def main() -> int:
