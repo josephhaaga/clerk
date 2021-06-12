@@ -1,6 +1,7 @@
 # Move journal.sh logic into here
 import datetime
 import os
+from hashlib import sha256
 import pathlib
 import subprocess
 import sys
@@ -43,12 +44,43 @@ class Application:
 
     def open_file(self, filename: str):
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
+        if not file_to_open.exists():
+            # NEW_JOURNAL_CREATED
+            print("Creating new journal")
+            hash_before = ""
+        else:
+            hash_before = hash_file(file_to_open)
+        # JOURNAL_OPENED
+        print("journal opened")
         subprocess.run([self.preferred_editor, file_to_open])
+
+        hash_after = ""
+        if file_to_open.exists():
+            hash_after = hash_file(file_to_open)
+
+        if hash_before != hash_after:
+            # JOURNAL_SAVED
+            print("journal saved")
+
+        # JOURNAL_CLOSED
+        print("journal closed")
+
         return True
 
     def convert_to_filename(self, target_date: datetime.datetime) -> str:
         """Convert a datetime.datetime object to a string 'YYYY-MM-DD'"""
         return f"{target_date.strftime(self.date_format)}.{self.file_extension}"
+
+
+def hash_file(filepath: pathlib.Path) -> str:
+    h = sha256()
+    with open(filepath, "rb") as f:
+        while True:
+            chunk = f.read(h.block_size)
+            if not chunk:
+                break
+            h.update(chunk)
+        return h.hexdigest()
 
 
 if __name__ == "__main__":
