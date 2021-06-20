@@ -23,6 +23,6 @@
 
 ### Hooks functionality
 - [X] add hooks functionality to main function
-- [ ] update config to parse hook specifications from config files
+- [X] update config to parse hook specifications from config files
 - [X] figure out how hooks get installed
-- [ ] write a simple hook to append a timestamp
+- [X] write a simple hook to append a timestamp

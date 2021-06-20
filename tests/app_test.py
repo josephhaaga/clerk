@@ -25,13 +25,13 @@ EXAMPLE_CONFIG = {
 
 @pytest.fixture(scope="session")
 def example_app():
-    return Application(EXAMPLE_CONFIG)
+    return Application(EXAMPLE_CONFIG, {})
 
 
 @patch("subprocess.run")
-def test_application_open_file(patched_subprocess_run, example_app):
+def test_application_open_journal(patched_subprocess_run, example_app):
     filename = "1234.md"
-    example_app.open_file(filename)
+    example_app.open_journal(filename)
     patched_subprocess_run.assert_called_once()
 
 
@@ -50,7 +50,7 @@ def test_application_convert_to_filename(date, filename, example_app):
 def test_application_creation_fails_with_missing_config_item():
     # https://medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        Application({"DEFAULT": {}})
+        Application({"DEFAULT": {}}, {})
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
 
@@ -67,11 +67,11 @@ def test_application_creation_fails_with_missing_config_item():
         ("three days from now", THREE_DAYS_FROM_NOW.strftime("%Y-%m-%d")),
     ],
 )
-@patch("clerk.app.Application.open_file")
-def test_main_loop(patched_open_file, phrase, date):
+@patch("clerk.app.Application.open_journal")
+def test_main_loop(patched_open_journal, phrase, date):
     # mock the `get_config` with a basic config
-    # patch `Application.open_file` and assert it's called as expected
+    # patch `Application.open_journal` and assert it's called as expected
     with patch("clerk.app.get_config", lambda: EXAMPLE_CONFIG):
         with patch("sys.argv", [" "] + phrase.split(" ")):
             main()
-    patched_open_file.assert_called_once_with(f"{date}.md")
+    patched_open_journal.assert_called_once_with(f"{date}.md")
