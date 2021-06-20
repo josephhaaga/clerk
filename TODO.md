@@ -19,10 +19,19 @@
 - [ ] publish package
     - create a `console_scripts` "alias" for `journal`
     - setup.cfg, pyproject.toml
+- [ ] create a `clerk-extension` starter template repo, with documentation on how to publish
 
-
-### Hooks functionality
+## Hooks functionality
 - [X] add hooks functionality to main function
 - [X] update config to parse hook specifications from config files
 - [X] figure out how hooks get installed
 - [X] write a simple hook to append a timestamp
+
+
+## More extensions
+- use `cowsay` to print cow, dinosaur etc.
+- use cowsay to print google tasks
+- blackendocs to blacken any python snippets
+- autosave, which will copy the tempfile back even if I don't save from my text editor
+- fortune cookie, which adds a fortune to your journal
+- forecast, adds weather to your journal
