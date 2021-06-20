@@ -1,6 +1,7 @@
 import datetime
 import os
 import hashlib
+import importlib.metadata
 import pathlib
 import shutil
 import subprocess
@@ -16,8 +17,12 @@ from clerk.parse import parse_english_to_date
 
 
 def main() -> int:
+    eps = importlib.metadata.entry_points()["clerk.extensions"]
+    # https://youtu.be/fY3Y_xPKWNA?t=717
+    _extensions = {entrypoint.name: entrypoint for entrypoint in eps}
+
     config = get_config()
-    app = Application(config)
+    app = Application(config, _extensions)
 
     # main loop
     day = "today"  # default to today's journal
@@ -30,7 +35,7 @@ def main() -> int:
 
 
 class Application:
-    def __init__(self, config: Mapping):
+    def __init__(self, config: Mapping, extensions: Mapping):
         # try to read config, and ensure required values are present
         # TODO: otherwise, instruct user to setup their config file (`clerk configure`)
         try:
@@ -40,7 +45,10 @@ class Application:
             self.file_extension = config["DEFAULT"]["file_extension"]
             self.hooks = {
                 "NEW_JOURNAL_CREATED": [lambda x: print("new!")],
-                "JOURNAL_OPENED": [lambda x: print("opened")],
+                "JOURNAL_OPENED": [
+                    lambda x: print("opened"),
+                    extensions["timestamp"].load(),  # TODO read me from config file
+                ],
                 "JOURNAL_SAVED": [lambda x: print("updating hyperthymestic")],
                 "JOURNAL_CLOSED": [
                     lambda x: print(
@@ -60,10 +68,10 @@ class Application:
             for hook in hooks:
                 # https://stackoverflow.com/a/15976014
                 data = f.readlines()
-                f.seek(0)
+                # f.seek(0)
                 results = hook(data)
                 if results:
-                    f.write(results)
+                    f.writelines(results)
                 f.truncate()
 
     def open_journal(self, filename: str):
@@ -74,11 +82,10 @@ class Application:
             else:
                 shutil.copy(file_to_open, journal.name)
 
-            old_hash = get_file_hash(journal.name)
-
             self._apply_hooks(self.hooks["JOURNAL_OPENED"], journal.name)
-            subprocess.run([self.preferred_editor, journal.name])
 
+            old_hash = get_file_hash(journal.name)
+            subprocess.run([self.preferred_editor, journal.name])
             new_hash = get_file_hash(journal.name)
 
             if old_hash != new_hash:
