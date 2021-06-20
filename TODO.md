@@ -26,6 +26,7 @@
 - [X] update config to parse hook specifications from config files
 - [X] figure out how hooks get installed
 - [X] write a simple hook to append a timestamp
+- Will 0.0.2 automatically read the 0.0.2/clerk.conf file? Build the package, make a new virtualenv, and install to find out
 
 
 ## More extensions

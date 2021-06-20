@@ -68,11 +68,17 @@ class Application:
             return []
         if hook_name not in self.config["hooks"]:
             return []
-        return [
-            self.extensions[ext_name]
-            for ext_name in self.config["hooks"][hook_name].split("\n")
-            if ext_name != ""
-        ]
+        try:
+            return [
+                self.extensions[ext_name]
+                for ext_name in self.config["hooks"][hook_name].split("\n")
+                if ext_name != ""
+            ]
+        except KeyError as e:
+            print(
+                f"Couldn't find plugin '{e.args[0]}' installed; please check your configuration at {config_file_path()}"
+            )
+            exit(1)
 
     def _apply_callbacks_for_hook(self, hook_name: str, filename: pathlib.Path):
         # applies a list of handler functions to a file
