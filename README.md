@@ -16,9 +16,15 @@ $ journal last friday
 # Creates or re-opens last friday's journal
 ```
 
+## Installation
+
+```
+$ pipx install josephhaaga-clerk
+```
+
 ## Setup
 
-You'll need a config like the following
+Create a `clerk.conf` file that looks like the following, but fill in your own details
 
 ```
 [DEFAULT]
@@ -27,6 +33,16 @@ preferred_editor=vi  # or code, nano, emacs, babi
 date_format=%%Y-%%m-%%d  # double % required - used in datetime's strftime()
 file_extension=md  # or rst, txt
 ```
+
+*Note: ini files don't support comments; remove those!*
+
+Then, move the config file to your app directory
+
+```
+$ mv clerk.conf $(python3 -c "import clerk.config; print(clerk.config.dirs().user_config_dir)")
+```
+
+
 
 ### Hooks
 
