@@ -1,4 +1,4 @@
-## Todos
+# Todos
 
 - [X] create basic workflow to open appropriate journal files
 - [X] test the main application loop (`app.main()`)
@@ -7,6 +7,7 @@
 - [ ] add "create new journal" functionality with a sensible templating solution
     - add prehook and posthook functionality around the `subprocess.run` call
         - then add a custom prehook that, if file is new, inserts a rendered template
+
 - [ ] add a `sample-config` command that prints an example config
     - README should instruct users to `clerk sample-config > /path/to/config/file`
     - since our config files are hidden in appdirs, maybe we should have a `generate-config` command that writes it _for_ them?
@@ -18,3 +19,10 @@
 - [ ] publish package
     - create a `console_scripts` "alias" for `journal`
     - setup.cfg, pyproject.toml
+
+
+### Hooks functionality
+- [X] add hooks functionality to main function
+- [ ] update config to parse hook specifications from config files
+- [X] figure out how hooks get installed
+- [ ] write a simple hook to append a timestamp
