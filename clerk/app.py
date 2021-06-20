@@ -6,6 +6,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from typing import Callable
+from typing import Sequence
 from typing import Mapping
 
 from clerk.config import config_file_path
@@ -36,32 +38,54 @@ class Application:
             self.preferred_editor = config["DEFAULT"]["preferred_editor"]
             self.date_format = config["DEFAULT"]["date_format"]
             self.file_extension = config["DEFAULT"]["file_extension"]
+            self.hooks = {
+                "NEW_JOURNAL_CREATED": [lambda x: print("new!")],
+                "JOURNAL_OPENED": [lambda x: print("opened")],
+                "JOURNAL_SAVED": [lambda x: print("updating hyperthymestic")],
+                "JOURNAL_CLOSED": [
+                    lambda x: print(
+                        "journal closed; incrementing journal opens database"
+                    )
+                ],
+            }
         except KeyError as e:
             print(
                 f"Your configuration at {config_file_path()} is missing a key '{e.args[0]}'"
             )
             exit(1)
 
+    def _apply_hooks(self, hooks: Sequence[Callable], filename: pathlib.Path):
+        # applies a list of handler functions to a file
+        with open(filename, "r+") as f:
+            for hook in hooks:
+                # https://stackoverflow.com/a/15976014
+                data = f.readlines()
+                f.seek(0)
+                results = hook(data)
+                if results:
+                    f.write(results)
+                f.truncate()
+
     def open_journal(self, filename: str):
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
         with tempfile.NamedTemporaryFile() as journal:
             if not pathlib.Path(file_to_open).exists():
-                print("NEW_JOURNAL_CREATED")
+                self._apply_hooks(self.hooks["NEW_JOURNAL_CREATED"], journal.name)
             else:
                 shutil.copy(file_to_open, journal.name)
 
             old_hash = get_file_hash(journal.name)
 
-            print("JOURNAL_OPENED")
+            self._apply_hooks(self.hooks["JOURNAL_OPENED"], journal.name)
             subprocess.run([self.preferred_editor, journal.name])
 
             new_hash = get_file_hash(journal.name)
 
             if old_hash != new_hash:
-                print("JOURNAL_SAVED")
+                self._apply_hooks(self.hooks["JOURNAL_SAVED"], journal.name)
                 shutil.copy(journal.name, file_to_open)
 
-            print("JOURNAL_CLOSED")
+            self._apply_hooks(self.hooks["JOURNAL_CLOSED"], journal.name)
             return True
 
     def convert_to_filename(self, target_date: datetime.datetime) -> str:
