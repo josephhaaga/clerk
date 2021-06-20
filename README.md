@@ -81,6 +81,7 @@ NEW_JOURNAL_CREATED =
 The `NEW_JOURNAL_CREATED` hook runs whenever the user opens a journal file that does not exist yet.
 
 *Input*: a `List[str]` representing the journal document
+
 *Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
 
 
@@ -89,6 +90,7 @@ The `NEW_JOURNAL_CREATED` hook runs whenever the user opens a journal file that 
 The `JOURNAL_OPENED` hook runs whenever the user opens a journal file.
 
 *Input*: a `List[str]` representing the journal document
+
 *Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
 
 
@@ -97,11 +99,14 @@ The `JOURNAL_OPENED` hook runs whenever the user opens a journal file.
 The `JOURNAL_SAVED` hook runs whenever a user saves their journal (resulting in the file's `md5` hash changing).
 
 *Input*: a `List[str]` representing the journal document
+
 *Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
+
 
 ##### Journal closed
 
 The `JOURNAL_CLOSED` hook runs whenever a user closes their journal.
 
 *Input*: a `List[str]` representing the journal document
+
 *Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
