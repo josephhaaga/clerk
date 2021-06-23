@@ -86,7 +86,10 @@ class Application:
             for callback in self.hooks[hook_name]:
                 f.seek(0)
                 data = f.readlines()
-                results = callback.load()(data)
+                conf = (
+                    self.config[callback.name] if callback.name in self.config else {}
+                )
+                results = callback.load()(data, conf)
                 if results:
                     f.seek(0)
                     f.writelines(results)
