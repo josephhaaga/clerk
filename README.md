@@ -82,11 +82,11 @@ NEW_JOURNAL_CREATED =
 
 All hooks have the following interface
 
-*Input*:
+**Input**:
 * a `Sequence[str]` representing the lines in the journal document
 * a `Mapping` containing any user-provided configuration
 
-*Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
+**Output**: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
 
 
 ##### New journal created
