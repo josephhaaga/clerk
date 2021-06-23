@@ -59,6 +59,10 @@ JOURNAL_OPENED =
     timestamp
 ```
 
+Callback-specific configuration can be provided in a separate block in your `clerk.conf` config file (see [clerk-timestamp example](https://github.com/josephhaaga/clerk-timestamp#configuration))
+
+#### Custom Callback functions
+
 Callback functions receive the entire journal document as a list of lines `List[str]`, and can return their own `List[str]` of lines that will overwrite the document. (`return None` or `False` if you don't wish to make any changes)
 
 Note that callback functions are called in the order they're listed, so in the following configuration, will receive the output of the first callback function. In the following example, `timestamp` receives the output of `fortune-cookie`
@@ -76,37 +80,27 @@ NEW_JOURNAL_CREATED =
 
 #### Available Hooks
 
-##### New journal created
+All hooks have the following interface
 
-The `NEW_JOURNAL_CREATED` hook runs whenever the user opens a journal file that does not exist yet.
-
-*Input*: a `List[str]` representing the journal document
+*Input*:
+* a `Sequence[str]` representing the lines in the journal document
+* a `Mapping` containing any user-provided configuration
 
 *Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
 
+
+##### New journal created
+
+The `NEW_JOURNAL_CREATED` hook runs whenever the user opens a journal file that does not exist yet.
 
 ##### Journal opened
 
 The `JOURNAL_OPENED` hook runs whenever the user opens a journal file.
 
-*Input*: a `List[str]` representing the journal document
-
-*Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
-
-
 ##### Journal saved
 
 The `JOURNAL_SAVED` hook runs whenever a user saves their journal (resulting in the file's `md5` hash changing).
 
-*Input*: a `List[str]` representing the journal document
-
-*Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
-
-
 ##### Journal closed
 
 The `JOURNAL_CLOSED` hook runs whenever a user closes their journal.
-
-*Input*: a `List[str]` representing the journal document
-
-*Output*: a `List[str]` representing the updated journal document (returning `None` or `False` will prevent any update)
