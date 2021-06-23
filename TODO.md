@@ -7,10 +7,13 @@
 - [ ] add "create new journal" functionality with a sensible templating solution
     - add prehook and posthook functionality around the `subprocess.run` call
         - then add a custom prehook that, if file is new, inserts a rendered template
-
-- [ ] add a `sample-config` command that prints an example config
-    - README should instruct users to `clerk sample-config > /path/to/config/file`
-    - since our config files are hidden in appdirs, maybe we should have a `generate-config` command that writes it _for_ them?
+- [ ] add a `clerk` console script that uses argparse
+    - `clerk --config` should return the path to the config file
+    - `clerk configure` should open the config file in an editor
+        - unless the user doesn't have an editor specified
+    - `clerk stats` could return some other stuff
+    - `clerk <pluginname>` could be a dedicated entrypoint for plugins?
+        - `clerk hyperthymestic` could run a search? or update the db?
 - [ ] add Google Tasks API integration
     - add a config option/flag to seed new journals with Google Tasks
     - a config option to update Google Tasks whenever I save my journal
@@ -36,3 +39,6 @@
 - autosave, which will copy the tempfile back even if I don't save from my text editor
 - fortune cookie, which adds a fortune to your journal
 - forecast, adds weather to your journal
+
+## Misc
+- add `file_extension` suffix to tempfile so `vi` will render markdown correctly
