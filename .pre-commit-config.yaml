@@ -16,3 +16,10 @@ repos:
     rev: 21.6b0
     hooks:
     -   id: black
+- repo: https://github.com/econchick/interrogate
+  rev: 1.4.0  # or master if you're bold
+  hooks:
+    - id: interrogate
+      args: [--quiet, --fail-under=95]
+      exclude: |
+        (setup.py|venv)
