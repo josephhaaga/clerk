@@ -1,3 +1,4 @@
+"""Tests the clerk.parse functions behave as expected"""
 import datetime
 import pytest
 from unittest.mock import patch
@@ -26,6 +27,7 @@ THREE_DAYS_FROM_NOW = TODAY + datetime.timedelta(days=3)
     ],
 )
 def test_parse_english_to_date(english, expected):
+    """Ensure clerk.parse.parse_english_to_date returns the expected datetime.datetime"""
     got = parse_english_to_date(english)
     got = (got.year, got.month, got.day)
     expectation = (expected.year, expected.month, expected.day)
@@ -56,6 +58,7 @@ def test_parse_english_to_date(english, expected):
     ],
 )
 def test_parse_english_to_date_last_next_this(todays_date, english, expected_date):
+    """Ensure clerk.parse.parse_english_to_date works for relative cases like 'last tuesday', 'this wednedsay' and 'next monday'"""
     today = datetime.datetime.fromisoformat(todays_date)
     with patch("datetime.datetime") as patched_datetime:
         patched_datetime.now.return_value = today

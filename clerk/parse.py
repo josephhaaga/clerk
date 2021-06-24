@@ -1,3 +1,4 @@
+"""Utility functions for resolving user input to dates"""
 import datetime
 import operator
 from typing import Union
@@ -28,6 +29,7 @@ DAYS_OF_WEEK = {
 
 
 def parse_number(number: Union[str, int]) -> int:
+    """Parse a number to an integer"""
     try:
         num = int(number)
     except ValueError:
@@ -36,6 +38,7 @@ def parse_number(number: Union[str, int]) -> int:
 
 
 def parse_english_to_date(english: str) -> datetime.datetime:
+    """Parse an english description of a date to a datetime.datetime object"""
     query = english.strip().lower()
     today = datetime.datetime.now()
     if query == "today":

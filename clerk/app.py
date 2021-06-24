@@ -1,3 +1,4 @@
+"""Main application logic"""
 import datetime
 import os
 import hashlib
@@ -17,6 +18,7 @@ from clerk.parse import parse_english_to_date
 
 
 def main() -> int:
+    """Main application entrypoint"""
     try:
         eps = importlib.metadata.entry_points()["clerk.extensions"]
         # https://youtu.be/fY3Y_xPKWNA?t=717
@@ -39,7 +41,10 @@ def main() -> int:
 
 
 class Application:
+    """Application class"""
+
     def __init__(self, config: Mapping, extensions: Mapping):
+        """Initialize a clerk Application object"""
         # try to read config, and ensure required values are present
         # TODO: otherwise, instruct user to setup their config file (`clerk configure`)
         try:
@@ -64,6 +69,7 @@ class Application:
             exit(1)
 
     def _get_callbacks_for_hook(self, hook_name: str) -> Sequence[Callable]:
+        """Gather callback functions for a specified hook"""
         if "hooks" not in self.config:
             return []
         if hook_name not in self.config["hooks"]:
@@ -81,7 +87,7 @@ class Application:
             exit(1)
 
     def _apply_callbacks_for_hook(self, hook_name: str, filename: pathlib.Path):
-        # applies a list of handler functions to a file
+        """Apply the callbacks for a specified hook to a specified file"""
         with open(filename, "r+") as f:
             for callback in self.hooks[hook_name]:
                 f.seek(0)
@@ -99,6 +105,7 @@ class Application:
                 f.truncate()
 
     def open_journal(self, filename: str):
+        """Opens the specified journal, calling appropriate Hooks along the way"""
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
         with tempfile.NamedTemporaryFile() as journal:
             if not pathlib.Path(file_to_open).exists():
@@ -124,7 +131,8 @@ class Application:
         return f"{target_date.strftime(self.date_format)}.{self.file_extension}"
 
 
-def get_file_hash(filename):
+def get_file_hash(filename: str):
+    """Return the md5 hash of a file's contents"""
     with open(filename, "r") as f:
         return hashlib.md5(f.read().encode("utf-8")).hexdigest()
 
