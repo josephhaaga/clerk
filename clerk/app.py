@@ -49,11 +49,16 @@ class Application:
         # TODO: otherwise, instruct user to setup their config file (`clerk configure`)
         try:
             self.config = config
-            self.extensions = extensions
             self.journal_directory = self.config["DEFAULT"]["journal_directory"]
             self.preferred_editor = self.config["DEFAULT"]["preferred_editor"]
             self.date_format = self.config["DEFAULT"]["date_format"]
             self.file_extension = self.config["DEFAULT"]["file_extension"]
+            self.extensions: Mapping[str, Callable] = {
+                extension.name: extension.load()(
+                    self.config[extension.name] if extension.name in self.config else {}
+                )
+                for _, extension in extensions.items()
+            }  # {"template": ClerkTemplate.apply, "timestamp": ClerkTimestamp.apply}
             self.hooks = {
                 "NEW_JOURNAL_CREATED": self._get_callbacks_for_hook(
                     "NEW_JOURNAL_CREATED"
@@ -92,10 +97,7 @@ class Application:
             for callback in self.hooks[hook_name]:
                 f.seek(0)
                 data = f.readlines()
-                conf = (
-                    self.config[callback.name] if callback.name in self.config else {}
-                )
-                results = callback.load()(data, conf)
+                results = callback.apply(data)
                 if results:
                     f.seek(0)
                     f.writelines(results)
