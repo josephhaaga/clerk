@@ -1,6 +1,8 @@
 """Test clerk main application logic"""
 import datetime
+import pathlib
 import pytest
+import tempfile
 from unittest.mock import patch
 
 from clerk.app import main
@@ -25,17 +27,43 @@ EXAMPLE_CONFIG = {
 
 
 @pytest.fixture(scope="session")
-def example_app():
+def user_data_dir():
+    """Fixture to set up user data directory."""
+    with tempfile.TemporaryDirectory() as t:
+        yield t
+
+
+@pytest.fixture(scope="session")
+def example_app(user_data_dir):
     """Fixture to set up an application object"""
-    return Application(EXAMPLE_CONFIG, {})
+    return Application(EXAMPLE_CONFIG, user_data_dir, {})
 
 
 @patch("subprocess.run")
 def test_application_open_journal(patched_subprocess_run, example_app):
     """Ensure Application.open_journal calls subprocess.run"""
-    filename = "1234.md"
-    example_app.open_journal(filename)
+    with tempfile.TemporaryDirectory() as some_dir:
+        filename = "1234.md"
+        existing_journal = pathlib.Path(some_dir, filename)
+        f = open(existing_journal, "a")
+        f.write("Now the file has more content!")
+        f.close()
+        example_app.open_journal(filename)
     patched_subprocess_run.assert_called_once()
+
+
+def test_application_wont_open_duplicate(user_data_dir, example_app):
+    """Ensure Application.open_journal wont open multiple copies of a file concurrently."""
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        filename = "12345.md"
+        existing_journal = pathlib.Path(user_data_dir, filename)
+        f = open(existing_journal, "a")
+        f.write("Now the file has more content!")
+        f.close()
+        example_app.open_journal(filename)
+
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
 
 
 @pytest.mark.parametrize(
@@ -51,11 +79,11 @@ def test_application_convert_to_filename(date, filename, example_app):
     assert got == filename
 
 
-def test_application_creation_fails_with_missing_config_item():
+def test_application_creation_fails_with_missing_config_item(user_data_dir):
     """Ensure application fails when a necessary configuration item is missing"""
     # https://medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        Application({"DEFAULT": {}}, {})
+        Application({"DEFAULT": {}}, user_data_dir, {})
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
 
