@@ -7,7 +7,6 @@ import pathlib
 import shutil
 import subprocess
 import sys
-import tempfile
 from typing import Callable
 from typing import Sequence
 from typing import Mapping
