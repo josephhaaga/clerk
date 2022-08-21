@@ -107,7 +107,7 @@ class Application:
     def open_journal(self, filename: str):
         """Opens the specified journal, calling appropriate Hooks along the way"""
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
-        with tempfile.NamedTemporaryFile() as journal:
+        with tempfile.NamedTemporaryFile(suffix=f".{self.file_extension}") as journal:
             if not pathlib.Path(file_to_open).exists():
                 self._apply_callbacks_for_hook("NEW_JOURNAL_CREATED", journal.name)
             else:
