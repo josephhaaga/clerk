@@ -1,2 +1,4 @@
 """Manage your daily journals"""
-__version__ = "0.0.5"
+from importlib.metadata import version
+
+__version__ = version(__name__)
