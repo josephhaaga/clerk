@@ -109,7 +109,7 @@ class Application:
                 f.truncate()
 
     def open_journal(self, filename: str):
-        """Opens the specified journal, calling appropriate Hooks along the way"""
+        """Opens the specified journal for writing, calling appropriate Hooks along the way, and handles eventual write or discard."""
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
         temporary_copy: pathlib.Path = pathlib.Path(self.temp_directory, filename)
         if temporary_copy.exists():

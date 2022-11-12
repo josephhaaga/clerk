@@ -42,25 +42,17 @@ def example_app(user_data_dir):
 @patch("subprocess.run")
 def test_application_open_journal(patched_subprocess_run, example_app):
     """Ensure Application.open_journal calls subprocess.run"""
-    with tempfile.TemporaryDirectory() as some_dir:
-        filename = "1234.md"
-        existing_journal = pathlib.Path(some_dir, filename)
-        f = open(existing_journal, "a")
-        f.write("Now the file has more content!")
-        f.close()
-        example_app.open_journal(filename)
+    filename = "1234.md"
+    example_app.open_journal(filename)
     patched_subprocess_run.assert_called_once()
 
 
 def test_application_wont_open_duplicate(user_data_dir, example_app):
     """Ensure Application.open_journal wont open multiple copies of a file concurrently."""
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
-        filename = "12345.md"
-        existing_journal = pathlib.Path(user_data_dir, filename)
-        f = open(existing_journal, "a")
-        f.write("Now the file has more content!")
-        f.close()
-        example_app.open_journal(filename)
+    filename = "12345.md"
+    with patch("pathlib.Path.exists", return_value=True):
+        with pytest.raises(SystemExit) as pytest_wrapped_e:
+            example_app.open_journal(filename)
 
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
