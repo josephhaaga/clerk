@@ -49,11 +49,9 @@ def test_application_open_journal(patched_subprocess_run, example_app):
 
 def test_application_wont_open_duplicate(user_data_dir, example_app):
     """Ensure Application.open_journal wont open multiple copies of a file concurrently."""
-    filename = "12345.md"
-    with patch("pathlib.Path.exists", return_value=True):
-        with pytest.raises(SystemExit) as pytest_wrapped_e:
-            example_app.open_journal(filename)
-
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        with tempfile.NamedTemporaryFile(dir=example_app.temp_directory) as t:
+            example_app.open_journal(t.name)
     assert pytest_wrapped_e.type == SystemExit
     assert pytest_wrapped_e.value.code == 1
 
