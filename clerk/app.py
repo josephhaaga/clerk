@@ -131,7 +131,7 @@ class Application:
         self._apply_callbacks_for_hook("JOURNAL_OPENED", temporary_copy)
 
         old_hash = get_file_hash(temporary_copy)
-        subprocess.run([self.preferred_editor, temporary_copy])
+        subprocess.run([*self.preferred_editor.split(" "), temporary_copy])
         new_hash = get_file_hash(temporary_copy)
 
         if old_hash != new_hash:
