@@ -5,12 +5,10 @@ from typing import Mapping
 from appdirs import AppDirs
 from configparser import ConfigParser
 
-from clerk import __version__
-
 
 def dirs() -> AppDirs:
     """Returns clerk's application directories"""
-    return AppDirs("clerk", "K Street Labs", version=__version__)
+    return AppDirs("clerk", "K Street Labs")
 
 
 def config_file_path() -> Path:
