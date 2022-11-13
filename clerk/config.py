@@ -15,12 +15,12 @@ def dirs() -> AppDirs:
 
 def config_file_path() -> Path:
     """Returns the path to clerk's configuration file"""
-    return Path(dirs().user_config_dir) / "clerk.conf"
+    return Path.home() / ".clerkrc"
 
 
 def temp_directory_path() -> Path:
     """Returns the path to user's clerk data directory"""
-    return Path(dirs().user_data_dir, dir) / "clerk.conf"
+    return Path(dirs().user_data_dir, dir) / "clerk"
 
 
 def get_config() -> Mapping:
