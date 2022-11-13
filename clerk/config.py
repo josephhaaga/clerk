@@ -5,22 +5,20 @@ from typing import Mapping
 from appdirs import AppDirs
 from configparser import ConfigParser
 
-from clerk import __version__
-
 
 def dirs() -> AppDirs:
     """Returns clerk's application directories"""
-    return AppDirs("clerk", "K Street Labs", version=__version__)
+    return AppDirs("clerk", "K Street Labs")
 
 
 def config_file_path() -> Path:
     """Returns the path to clerk's configuration file"""
-    return Path(dirs().user_config_dir) / "clerk.conf"
+    return Path.home() / ".clerkrc"
 
 
 def temp_directory_path() -> Path:
     """Returns the path to user's clerk data directory"""
-    return Path(dirs().user_data_dir, dir) / "clerk.conf"
+    return Path(dirs().user_data_dir, dir) / "clerk"
 
 
 def get_config() -> Mapping:

@@ -25,7 +25,7 @@ $ pipx install josephhaaga-clerk
 
 ## Setup
 
-Create a `clerk.conf` file that looks like the following, but fill in your own details
+Create a `.clerkrc` file in your home directory that looks like the following, but fill in your own details
 
 ```
 [DEFAULT]
@@ -37,17 +37,11 @@ file_extension=md  # or rst, txt
 
 *Note: ini files don't support comments; remove those!*
 
-Then, move the config file to your app directory
-
-```
-$ mv clerk.conf $(python3 -c "import clerk.config; print(clerk.config.dirs().user_config_dir)")
-```
-
 
 
 ### Hooks
 
-As of v0.0.2, you can add custom callback functions. Simply add the callback name in your `clerk.conf`, and ensure the package is installed!
+As of v0.0.2, you can add custom callback functions. Simply add the callback name in your `.clerkrc`, and ensure the package is installed!
 
 For example, here's how you'd configure [clerk-timestamp](https://github.com/josephhaaga/clerk-timestamp) to fire every time you open a journal
 
@@ -60,7 +54,7 @@ JOURNAL_OPENED =
     timestamp
 ```
 
-Callback-specific configuration can be provided in a separate block in your `clerk.conf` config file (see [clerk-timestamp example](https://github.com/josephhaaga/clerk-timestamp#configuration))
+Callback-specific configuration can be provided in a separate block in your `.clerkrc` config file (see [clerk-timestamp example](https://github.com/josephhaaga/clerk-timestamp#configuration))
 
 #### Custom Callback functions
 

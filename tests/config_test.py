@@ -19,12 +19,6 @@ def test_dirs_contains_user_config_dir():
     assert isinstance(got.user_config_dir, str)
 
 
-def test_config_file_path_contains_clerk_dot_conf():
-    """Ensure clerk.config.config_file_path ends in clerk.conf"""
-    got = config_file_path()
-    assert "clerk.conf" == str(got)[-10:]
-
-
 def test_get_config_returns_mapping():
     """Ensure clerk.config.get_config returns a Mapping object"""
     got = get_config()
