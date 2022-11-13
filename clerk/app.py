@@ -71,6 +71,10 @@ class Application:
                 f"Your configuration at {config_file_path()} is missing a key '{e.args[0]}'"
             )
             exit(1)
+        if not pathlib.Path(self.journal_directory).is_dir():
+            raise FileNotFoundError(
+                f"Your journal_directory ({self.journal_directory}) doesn't exist. Please create this directory and try again"
+            )
 
     def _get_callbacks_for_hook(self, hook_name: str) -> Sequence[Callable]:
         """Gather callback functions for a specified hook"""
