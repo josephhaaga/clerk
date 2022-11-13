@@ -20,7 +20,7 @@ $ journal last friday
 ## Installation
 
 ```
-$ pipx install josephhaaga-clerk
+$ pipx install josephhaaga-clerk && pipx ensurepath
 ```
 
 ## Setup
