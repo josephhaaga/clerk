@@ -72,7 +72,7 @@ class Application:
             )
             exit(1)
         if not pathlib.Path(self.journal_directory).is_dir():
-            raise SystemExit(
+            raise FileNotFoundError(
                 f"Your journal_directory ({self.journal_directory}) doesn't exist. Please create this directory and try again"
             )
 
