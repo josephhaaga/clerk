@@ -28,7 +28,7 @@ def main() -> int:
         _extensions = {}
 
     config = get_config()
-    user_data_directory = temp_directory_path
+    user_data_directory = temp_directory_path()
     app = Application(config, user_data_directory, _extensions)
 
     # main loop

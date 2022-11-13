@@ -18,7 +18,7 @@ def config_file_path() -> Path:
 
 def temp_directory_path() -> Path:
     """Returns the path to user's clerk data directory"""
-    return Path(dirs().user_data_dir, dir) / "clerk"
+    return Path(dirs().user_data_dir)
 
 
 def get_config() -> Mapping:
