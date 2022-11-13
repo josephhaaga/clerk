@@ -36,7 +36,7 @@ def user_data_dir():
 @pytest.fixture(scope="session")
 def example_app(user_data_dir):
     """Fixture to set up an application object"""
-    return Application(EXAMPLE_CONFIG, user_data_dir, {})
+    yield Application(EXAMPLE_CONFIG, user_data_dir, {})
 
 
 @patch("subprocess.run")
@@ -45,6 +45,23 @@ def test_application_open_journal(patched_subprocess_run, example_app):
     filename = "1234.md"
     example_app.open_journal(filename)
     patched_subprocess_run.assert_called_once()
+
+
+def test_application_quits_on_missing_journals_dir():
+    """Ensure Application raises a SystemExit when the journal_directory doesn't exist."""
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        with tempfile.TemporaryDirectory() as d:
+            tmp_config = {
+                "DEFAULT": {
+                    "journal_directory": f"{d}/some-nonexistent-directory",
+                    "preferred_editor": "vi",
+                    "date_format": "%Y-%m-%d",
+                    "file_extension": "md",
+                }
+            }
+            Application(tmp_config, user_data_dir, {})
+    assert pytest_wrapped_e.type == SystemExit
+    assert pytest_wrapped_e.value.code == 1
 
 
 def test_application_wont_open_duplicate(user_data_dir, example_app):
