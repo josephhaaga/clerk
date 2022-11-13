@@ -56,24 +56,6 @@ def test_application_open_journal(patched_subprocess_run, example_app):
     patched_subprocess_run.assert_called_once()
 
 
-@pytest.mark.parametrize(
-    "text, commands", [("vi", ["vi"]), ("vi '+normal Go'", ["vi", "'+normal Go'"])]
-)
-def test_application_parses_preferred_editor(text, commands):
-    """Ensure Application correctly parses preferred_editor, include flags."""
-    with tempfile.TemporaryDirectory() as d:
-        tmp_config = {
-            "DEFAULT": {
-                "journal_directory": d,
-                "preferred_editor": text,
-                "date_format": "%Y-%m-%d",
-                "file_extension": "md",
-            }
-        }
-        a = Application(tmp_config, user_data_dir, {})
-        assert a.preferred_editor == commands
-
-
 def test_application_quits_on_missing_journals_dir():
     """Ensure Application raises a SystemExit when the journal_directory doesn't exist."""
     with pytest.raises(FileNotFoundError) as pytest_wrapped_e:

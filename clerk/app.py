@@ -55,9 +55,7 @@ class Application:
             self.extensions = extensions
             self.temp_directory = user_data_directory
             self.journal_directory = self.config["DEFAULT"]["journal_directory"]
-            self.preferred_editor = self._parse_preferred_editor(
-                self.config["DEFAULT"]["preferred_editor"]
-            )
+            self.preferred_editor = self.config["DEFAULT"]["preferred_editor"]
             self.date_format = self.config["DEFAULT"]["date_format"]
             self.file_extension = self.config["DEFAULT"]["file_extension"]
             self.hooks = {
@@ -114,18 +112,6 @@ class Application:
                     print(f"{callback.name} ran; no changes made")
                 f.truncate()
 
-    def _parse_preferred_editor(self, preferred_editor: str) -> Sequence[str]:
-        """Parse the preferred_editor config item into a List of commands."""
-        # Let's try just splitting on the first space we see.
-        try:
-            index_of_first_space = preferred_editor.index(" ")
-        except ValueError:
-            return [preferred_editor]
-        return [
-            preferred_editor[:index_of_first_space],
-            preferred_editor[index_of_first_space + 1 :],
-        ]
-
     def open_journal(self, filename: str):
         """Opens the specified journal for writing, calling appropriate Hooks along the way, and handles eventual write or discard."""
         file_to_open: pathlib.Path = pathlib.Path(self.journal_directory, filename)
@@ -145,7 +131,8 @@ class Application:
         self._apply_callbacks_for_hook("JOURNAL_OPENED", temporary_copy)
 
         old_hash = get_file_hash(temporary_copy)
-        subprocess.run([*self.preferred_editor, temporary_copy])
+        run_str = f"{self.preferred_editor} " + str(temporary_copy).replace(" ", "\\ ")
+        subprocess.run(run_str, shell=True)
         new_hash = get_file_hash(temporary_copy)
 
         if old_hash != new_hash:
