@@ -27,15 +27,20 @@ def test_get_config_returns_mapping():
 
 @patch("pathlib.Path.expanduser")
 @patch("clerk.config.config_file_path")
-def test_get_config_expands_journal_directory(patched_config_file_path, patched_expand_user):
+def test_get_config_expands_journal_directory(
+    patched_config_file_path, patched_expand_user
+):
     """Ensure clerk.config.get_config expands journal_directory into an absolute path."""
-    patched_expand_user.return_value = "/Users/clerk-user"
+    patched_expand_user.return_value = "/Users/clerk-user/some/journals/dir"
     with NamedTemporaryFile() as f:
         with open(f.name, "w") as fs:
             fs.write("[DEFAULT]\njournal_directory=~/some/journals/dir")
         patched_config_file_path.return_value = Path(f.name)
         conf = get_config()
-        assert conf["DEFAULT"]["journal_directory"] == "/Users/clerk-user/some/journals/dir"
+        assert (
+            conf["DEFAULT"]["journal_directory"]
+            == "/Users/clerk-user/some/journals/dir"
+        )
 
 
 @patch("clerk.config.config_file_path")
