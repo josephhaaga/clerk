@@ -25,11 +25,11 @@ $ pipx install josephhaaga-clerk && pipx ensurepath
 
 ## Setup
 
-Create a `.clerkrc` file in your home directory that looks like the following, but fill in your own details
+Create a `.clerkrc` file in your home directory that looks like the following, but fill in your own details. For example, [here's mine](https://github.com/josephhaaga/dotfiles/blob/master/.clerkrc)!
 
 ```
 [DEFAULT]
-journal_directory=/Users/josephhaaga/journals  # absolute path
+journal_directory=~/journals  # where your journals will be created
 preferred_editor=vi  # or code, nano, emacs, babi
 date_format=%%Y-%%m-%%d  # double % required - used in datetime's strftime()
 file_extension=md  # or rst, txt

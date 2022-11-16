@@ -29,6 +29,9 @@ def get_config() -> Mapping:
     config_file.touch(exist_ok=True)
     conf = ConfigParser()
     conf.read(config_file)
+    conf["DEFAULT"]["journal_directory"] = str(
+        Path(conf["DEFAULT"]["journal_directory"]).expanduser()
+    )
     return conf
 
 

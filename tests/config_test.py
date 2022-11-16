@@ -19,10 +19,37 @@ def test_dirs_contains_user_config_dir():
     assert isinstance(got.user_config_dir, str)
 
 
-def test_get_config_returns_mapping():
+@pytest.fixture
+def clerk_config():
+    """Fixture to create a temporary .clerkrc for tests."""
+    with patch("clerk.config.config_file_path") as patched_config_file_path:
+        with NamedTemporaryFile() as f:
+            with open(f.name, "w") as fs:
+                fs.writelines(
+                    [
+                        "[DEFAULT]\n",
+                        "journal_directory=~/some/journals/dir\n",
+                        "preferred_editor=vi\n",
+                        "date_format=%%Y-%%m-%%d\n",
+                        "file_extension=md",
+                    ]
+                )
+            patched_config_file_path.return_value = Path(f.name)
+            yield
+
+
+def test_get_config_returns_mapping(clerk_config):
     """Ensure clerk.config.get_config returns a Mapping object"""
     got = get_config()
     assert isinstance(got, Mapping)
+
+
+@patch("pathlib.Path.expanduser")
+def test_get_config_expands_journal_directory(patched_expand_user, clerk_config):
+    """Ensure clerk.config.get_config expands journal_directory into an absolute path."""
+    patched_expand_user.return_value = "/Users/clerk-user/some/journals/dir"
+    conf = get_config()
+    assert conf["DEFAULT"]["journal_directory"] == "/Users/clerk-user/some/journals/dir"
 
 
 @patch("clerk.config.config_file_path")
@@ -37,6 +64,7 @@ def test_write_config_writes_successfully(patched_config_file_path):
         assert file_contents == ["[DEFAULT]\n", "hello = hi there\n", "\n"]
 
 
+# TODO: test the validation function, rather than the config file itself.
 @pytest.mark.skip
 @pytest.mark.parametrize(
     "field", ["journal_directory", "editor", "date_format", "file_extension"]
