@@ -132,6 +132,7 @@ class Application:
             shutil.copy(temporary_copy, file_to_open)
 
         self._apply_callbacks_for_hook("JOURNAL_CLOSED", temporary_copy)
+        shutil.copy(temporary_copy, file_to_open)
         temporary_copy.unlink()  # delete temp copy
         return True
 
