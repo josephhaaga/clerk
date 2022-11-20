@@ -94,15 +94,6 @@ def test_application_convert_to_filename(date, filename, example_app):
     assert got == filename
 
 
-def test_application_creation_fails_with_missing_config_item(user_data_dir):
-    """Ensure application fails when a necessary configuration item is missing"""
-    # https://medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
-        Application({"DEFAULT": {}}, user_data_dir, {})
-    assert pytest_wrapped_e.type == SystemExit
-    assert pytest_wrapped_e.value.code == 1
-
-
 @pytest.mark.parametrize(
     "phrase,date",
     [

@@ -64,6 +64,25 @@ def test_write_config_writes_successfully(patched_config_file_path):
         assert file_contents == ["[DEFAULT]\n", "hello = hi there\n", "\n"]
 
 
+def test_get_config_fails_with_missing_config_item():
+    """Ensure application fails when a necessary configuration item is missing"""
+    # https://medium.com/python-pandemonium/testing-sys-exit-with-pytest-10c6e5f7726f
+    with patch("clerk.config.config_file_path") as patched_config_file_path:
+        with NamedTemporaryFile() as f:
+            with open(f.name, "w") as fs:
+                fs.writelines(
+                    [
+                        "[DEFAULT]\n",
+                        "file_extension=md",
+                    ]
+                )
+            patched_config_file_path.return_value = Path(f.name)
+            with pytest.raises(SystemExit) as pytest_wrapped_e:
+                get_config()
+            assert pytest_wrapped_e.type == SystemExit
+            assert pytest_wrapped_e.value.code == 1
+
+
 # TODO: test the validation function, rather than the config file itself.
 @pytest.mark.skip
 @pytest.mark.parametrize(

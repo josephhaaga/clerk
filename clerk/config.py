@@ -29,9 +29,18 @@ def get_config() -> Mapping:
     config_file.touch(exist_ok=True)
     conf = ConfigParser()
     conf.read(config_file)
-    conf["DEFAULT"]["journal_directory"] = str(
-        Path(conf["DEFAULT"]["journal_directory"]).expanduser()
-    )
+    try:
+        conf["DEFAULT"]["journal_directory"] = str(
+            Path(conf["DEFAULT"]["journal_directory"]).expanduser()
+        )
+        conf["DEFAULT"]["preferred_editor"]
+        conf["DEFAULT"]["date_format"]
+        conf["DEFAULT"]["file_extension"]
+    except KeyError as e:
+        print(
+            f"Your configuration at {config_file_path()} is missing a key '{e.args[0]}'"
+        )
+        exit(1)
     return conf
 
 

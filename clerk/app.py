@@ -50,27 +50,19 @@ class Application:
         """Initialize a clerk Application object"""
         # try to read config, and ensure required values are present
         # TODO: otherwise, instruct user to setup their config file (`clerk configure`)
-        try:
-            self.config = config
-            self.extensions = extensions
-            self.temp_directory = user_data_directory
-            self.journal_directory = self.config["DEFAULT"]["journal_directory"]
-            self.preferred_editor = self.config["DEFAULT"]["preferred_editor"]
-            self.date_format = self.config["DEFAULT"]["date_format"]
-            self.file_extension = self.config["DEFAULT"]["file_extension"]
-            self.hooks = {
-                "NEW_JOURNAL_CREATED": self._get_callbacks_for_hook(
-                    "NEW_JOURNAL_CREATED"
-                ),
-                "JOURNAL_OPENED": self._get_callbacks_for_hook("JOURNAL_OPENED"),
-                "JOURNAL_SAVED": self._get_callbacks_for_hook("JOURNAL_SAVED"),
-                "JOURNAL_CLOSED": self._get_callbacks_for_hook("JOURNAL_CLOSED"),
-            }
-        except KeyError as e:
-            print(
-                f"Your configuration at {config_file_path()} is missing a key '{e.args[0]}'"
-            )
-            exit(1)
+        self.config = config
+        self.extensions = extensions
+        self.temp_directory = user_data_directory
+        self.journal_directory = self.config["DEFAULT"]["journal_directory"]
+        self.preferred_editor = self.config["DEFAULT"]["preferred_editor"]
+        self.date_format = self.config["DEFAULT"]["date_format"]
+        self.file_extension = self.config["DEFAULT"]["file_extension"]
+        self.hooks = {
+            "NEW_JOURNAL_CREATED": self._get_callbacks_for_hook("NEW_JOURNAL_CREATED"),
+            "JOURNAL_OPENED": self._get_callbacks_for_hook("JOURNAL_OPENED"),
+            "JOURNAL_SAVED": self._get_callbacks_for_hook("JOURNAL_SAVED"),
+            "JOURNAL_CLOSED": self._get_callbacks_for_hook("JOURNAL_CLOSED"),
+        }
         if not pathlib.Path(self.journal_directory).is_dir():
             raise FileNotFoundError(
                 f"Your journal_directory ({self.journal_directory}) doesn't exist. Please create this directory and try again"
