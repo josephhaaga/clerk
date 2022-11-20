@@ -99,3 +99,12 @@ The `JOURNAL_SAVED` hook runs whenever a user saves their journal (resulting in 
 ##### Journal closed
 
 The `JOURNAL_CLOSED` hook runs whenever a user closes their journal.
+
+
+## Development
+```bash
+$ python3 -m pip install pytest pytest-cov pytest-xdist
+
+# Re-run tests whenever a file is changed
+$ PYTHONPATH=${PWD} python3 -m pytest -f
+```
