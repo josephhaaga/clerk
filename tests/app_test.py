@@ -3,7 +3,7 @@ import datetime
 import pathlib
 import pytest
 import tempfile
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from clerk.app import main
 from clerk.app import Application
@@ -115,3 +115,19 @@ def test_main_loop(patched_open_journal, phrase, date):
         with patch("sys.argv", [" "] + phrase.split(" ")):
             main()
     patched_open_journal.assert_called_once_with(f"{date}.md")
+
+
+@patch("subprocess.run")
+def test_journal_closed_changes_get_applied(patched_subprocess_run, example_app):
+    """Ensure the JOURNAL_CLOSED hook is applied to the final output file."""
+    m = MagicMock(return_value=["HELLO WORLD"])
+    custom_hook_implementation = MagicMock()
+    custom_hook_implementation.name = "custom"
+    custom_hook_implementation.load.return_value = m
+    example_app.hooks["JOURNAL_CLOSED"] = [custom_hook_implementation]
+    with tempfile.NamedTemporaryFile(dir=example_app.journal_directory) as t:
+        filename = pathlib.Path(t.name).name
+        example_app.open_journal(filename)
+        m.assert_called_once()
+        with open(t.name, "r") as f:
+            assert f.readlines() == ["HELLO WORLD"]
