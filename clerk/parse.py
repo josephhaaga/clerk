@@ -1,4 +1,5 @@
 """Utility functions for resolving user input to dates"""
+
 import datetime
 import operator
 from typing import Union

@@ -1,4 +1,5 @@
 """Tests the clerk.parse functions behave as expected"""
+
 import datetime
 import pytest
 from unittest.mock import patch
