@@ -1,4 +1,5 @@
 """Test clerk main application logic"""
+
 import datetime
 import pathlib
 import pytest
