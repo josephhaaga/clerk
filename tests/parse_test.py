@@ -1,11 +1,11 @@
 """Tests the clerk.parse functions behave as expected"""
+
 import datetime
 import pytest
 from unittest.mock import patch
 
 from clerk.parse import parse_english_to_date
 from clerk import parse
-
 
 TODAY = datetime.datetime.now()
 YESTERDAY = TODAY - datetime.timedelta(days=1)
