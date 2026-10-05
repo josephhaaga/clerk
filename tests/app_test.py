@@ -1,4 +1,5 @@
 """Test clerk main application logic"""
+
 import datetime
 import pathlib
 import pytest
@@ -7,7 +8,6 @@ from unittest.mock import patch, MagicMock
 
 from clerk.app import main
 from clerk.app import Application
-
 
 TODAY = datetime.datetime.now()
 YESTERDAY = TODAY - datetime.timedelta(days=1)
