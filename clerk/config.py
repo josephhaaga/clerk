@@ -1,4 +1,5 @@
 """Utility functions for managing clerk's configuration"""
+
 from pathlib import Path
 from typing import Mapping
 

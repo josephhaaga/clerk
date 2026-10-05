@@ -1,4 +1,5 @@
 """Main application logic"""
+
 import datetime
 import os
 import hashlib

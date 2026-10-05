@@ -1,10 +1,10 @@
 """Utility functions for resolving user input to dates"""
+
 import datetime
 import operator
 from typing import Union
 
 from word2number import w2n
-
 
 SCALES = {
     "days": 1,
