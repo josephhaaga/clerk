@@ -1,4 +1,5 @@
 """Tests for clerk's config utility functions"""
+
 from configparser import ConfigParser
 from pathlib import Path
 import pytest
